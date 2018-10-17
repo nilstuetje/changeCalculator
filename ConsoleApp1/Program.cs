@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ConsoleApp1
 {
     /// <summary>
@@ -20,6 +21,10 @@ namespace ConsoleApp1
             bool repeat = true;
             while (repeat)
             {
+                ChangeCalculatorInput input = new ChangeCalculatorInput();
+
+
+                /*
                 Console.WriteLine();
                 //variables for price, money given, available coins and 
                 double doub_price = 0;
@@ -134,12 +139,13 @@ namespace ConsoleApp1
                 {
                     return null;
                 }
+
+
+
+    */
             }
-
-
+            
         }
-
-
 
 
     }
