@@ -92,6 +92,11 @@ namespace ConsoleApp1
                 Console.WriteLine("Geben sie alle werte ein");
                 return null;
             }
+            else if(given < price)
+            {
+                Console.WriteLine("Preis ist hoeher als das gegebene Geld");
+                return null;
+            }
             else
             {
                 //double to hold the remaining change
@@ -115,11 +120,6 @@ namespace ConsoleApp1
                     
                 }
 
-                //debug code remove later
-                foreach (int i in arr_return)
-                {
-                    Console.WriteLine(Convert.ToString(i));
-                }
 
                 //checking if change remains and returnign nullif any is left, otherwise an array containing the amounts of coins
                 if (remaining_change == 0)
