@@ -21,8 +21,12 @@ namespace ConsoleApp1
             bool repeat = true;
             while (repeat)
             {
-                ChangeCalculatorInput input = new ChangeCalculatorInput();
+                Console.WriteLine();
 
+                ChangeCalculatorInput input = new ChangeCalculatorInput();
+                ChangeCalculatorCalc calc = new ChangeCalculatorCalc(input);
+                ChangeCalculatorOutput.OutputConsole(calc);
+                
 
                 /*
                 Console.WriteLine();
@@ -67,13 +71,14 @@ namespace ConsoleApp1
                         }
                     }
                 }
-                
+                */
                 Console.WriteLine("Weiter?(j)");
 
                 if (Console.ReadKey().KeyChar != 'j')
                 {
                     repeat = false;
                 }
+                /*
                 
             }
         }
@@ -130,7 +135,7 @@ namespace ConsoleApp1
                     Console.WriteLine(Convert.ToString(i));
                 }
 
-                //checking if change remains and returnign nullif any is left, otherwise an array containing the amounts of coins
+                //checking if change remains and returnign null if any is left, otherwise an array containing the amounts of coins
                 if (remaining_change == 0)
                 {
                     return arr_return;
