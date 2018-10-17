@@ -15,8 +15,7 @@ namespace ConsoleApp1
         private static readonly double[] const_arr_coins = new double[] { 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01 };
 
         static void Main(string[] args)
-        {
-            int random_change = 42;
+        {            
             //loop to make the program repeat
             bool repeat = true;
             while (repeat)
@@ -87,9 +86,14 @@ namespace ConsoleApp1
             int[] arr_return = new int[const_arr_coins.Length];
 
             //checking agains zero values
-            if (price == 0 || given == 0)
+            if (price <= 0 || given <= 0)
             {
                 Console.WriteLine("Geben sie alle werte ein");
+                return null;
+            }
+            else if (price > given)
+            {
+                Console.WriteLine("Es wurde nicht genug bezahlt");
                 return null;
             }
             else
@@ -110,9 +114,9 @@ namespace ConsoleApp1
                     {
                         arr_return[i] = avail_coins[i];
                     }
-                                        
+
                     remaining_change -= Convert.ToDouble(arr_return[i] * const_arr_coins[i]);
-                    
+
                 }
 
                 //debug code remove later
