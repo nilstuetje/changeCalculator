@@ -44,13 +44,13 @@ namespace ConsoleApp1
         /// <param name="singleCent">the amount of one cent pieces</param>
         /// <param name="price">the total price to be paid</param>
         /// <param name="given">the amount of money given by the customer</param>
-        public ChangeCalculatorInput(int euroOne, int fiftyCent, int twentyCent,int tencent, int fiveCent, int twoCent, int singleCent, 
+        public ChangeCalculatorInput(int euroOne, int fiftyCent, int twentyCent,int tenCent, int fiveCent, int twoCent, int singleCent, 
             decimal price, decimal given)
         {
             EuroOne = euroOne;
             FiftyCent = fiftyCent;
             TwentyCent = twentyCent;
-            TenCent = TenCent;
+            TenCent = tenCent;
             FiveCent = fiveCent;
             TwoCent = twoCent;
             SingleCent = singleCent;
@@ -81,17 +81,25 @@ namespace ConsoleApp1
             RemainingChange = calcInput.Given - calcInput.Price;
             ChangeCalculatorOutput calcOut = new ChangeCalculatorOutput();
 
-            calcOut.CanChange = true;
+            //checking if price is less or equal to given before doing any calculations
+            if(calcInput.Price <= calcInput.Given)
+            {
+                calcOut.CanChange = true;
+            }
 
             //calling UpdateCoinCount 7 times with the appropiate parameters for each coin
-            calcOut.EuroOne=UpdateCoinCount(calcInput.EuroOne, 1m);
-            calcOut.FiftyCent =UpdateCoinCount(calcInput.FiftyCent, 0.5m);
-            calcOut.TwentyCent =UpdateCoinCount(calcInput.TwentyCent, 0.2m);
-            calcOut.TenCent =UpdateCoinCount(calcInput.TenCent, 0.1m);
-            calcOut.FiveCent =UpdateCoinCount(calcInput.FiveCent, 0.05m);
-            calcOut.TwoCent =UpdateCoinCount(calcInput.TwoCent, 0.02m);
-            calcOut.SingleCent =UpdateCoinCount(calcInput.SingleCent, 0.01m);
+            if (calcOut.CanChange)
+            {
+                calcOut.EuroOne = UpdateCoinCount(calcInput.EuroOne, 1m);
+                calcOut.FiftyCent = UpdateCoinCount(calcInput.FiftyCent, 0.5m);
+                calcOut.TwentyCent = UpdateCoinCount(calcInput.TwentyCent, 0.2m);
+                calcOut.TenCent = UpdateCoinCount(calcInput.TenCent, 0.1m);
+                calcOut.FiveCent = UpdateCoinCount(calcInput.FiveCent, 0.05m);
+                calcOut.TwoCent = UpdateCoinCount(calcInput.TwoCent, 0.02m);
+                calcOut.SingleCent = UpdateCoinCount(calcInput.SingleCent, 0.01m);
+            }
 
+            //chckign if any change remains
             if(RemainingChange > 0)
             {
                 calcOut.CanChange = false;
@@ -112,6 +120,7 @@ namespace ConsoleApp1
             //checking if the coind count would exceed the amount of available coins and returning the max amount if it is the case
             if (RemainingChange / coinValue > availCoin)
             {
+                RemainingChange -= (coinValue * availCoin);
                 return availCoin;
             }
             else
@@ -129,7 +138,7 @@ namespace ConsoleApp1
 
 
     /// <summary>
-    /// class handling all the output
+    /// class saving all the output
     /// </summary>
     public class ChangeCalculatorOutput
     {
