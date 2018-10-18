@@ -12,7 +12,7 @@ namespace ConsoleApp1
     /// </summary>
     public class Program
     {
-        //available coin types saved i nconstant array to make changing easyer
+        //available coin types saved in constant array to make changing of coin types easyer
         private static readonly double[] const_arr_coins = new double[] { 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01 };
 
         static void Main(string[] args)
