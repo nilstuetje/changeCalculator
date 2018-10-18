@@ -16,7 +16,6 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            int random_change = 42;
             //loop to make the program repeat
             bool repeat = true;
             while (repeat)
