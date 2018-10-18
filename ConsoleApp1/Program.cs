@@ -16,142 +16,111 @@ namespace ConsoleApp1
         private static readonly double[] const_arr_coins = new double[] { 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01 };
 
         static void Main(string[] args)
-        {            
+        {
+            //instancing ChangeCalculatorInput
+            ChangeCalculatorInput calcIn = new ChangeCalculatorInput();
+            ChangeCalculatorOutput calcOut = new ChangeCalculatorOutput();
+
             //loop to make the program repeat
             bool repeat = true;
             while (repeat)
             {
                 Console.WriteLine();
 
-                ChangeCalculatorInput input = new ChangeCalculatorInput();
-                ChangeCalculatorCalc calc = new ChangeCalculatorCalc(input);
-                ChangeCalculatorOutput.OutputConsole(calc);
-                
 
-                /*
-                Console.WriteLine();
-                //variables for price, money given, available coins and 
-                double doub_price = 0;
-                double doub_given = 0;
-                int[] available_coins = new int[const_arr_coins.Length];
-                int[] arr_change = new int[const_arr_coins.Length];
 
-                //reading in Values
-                Console.WriteLine("Geben sie den Preis ein:");
-                doub_price = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
-                Console.WriteLine();
-                Console.WriteLine("Geben sie das gegebene Geld ein:");
-                doub_given = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
-                Console.WriteLine();
+                //reading all the values and storing them in the ChangeCalculatorInput Object
+                #region ReadInput
 
-                for (int i = 0; i < const_arr_coins.Length; i++)
+                Console.WriteLine("Geben sie den Preis ein: ");
+                calcIn.Price = Convert.ToDecimal(Console.ReadLine().Replace(".", ","));
+
+                Console.WriteLine("Geben sie ein, wieviel Geld gegeben wurde: ");
+                calcIn.Given = Convert.ToDecimal(Console.ReadLine().Replace(".", ","));
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 1 euro Stuecken ein:  ");
+                calcIn.EuroOne = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 50 cent Stuecken ein:  ");
+                calcIn.FiftyCent = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 20 cent Stuecken ein:  ");
+                calcIn.TwentyCent = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 10 cent Stuecken ein:  ");
+                calcIn.TenCent = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 5 cent Stuecken ein:  ");
+                calcIn.FiveCent = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 2 cent Stuecken ein:  ");
+                calcIn.TwoCent = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Geben sie die Menge an vorhandenen 1 cent Stuecken ein:  ");
+                calcIn.SingleCent = Convert.ToInt32(Console.ReadLine());
+
+                #endregion
+
+
+                //using the static class ChangeCalculatorCalc to calculate the change and save it in the ChangeCalculateOutput instance
+                calcOut = ChangeCalculatorCalc.Calculate(calcIn);
+
+                //OUputing the values saved in the ChangeCalculatorOutput instance, skipping coinamounts that are 0 or evrything if canChange is false
+                #region Output coinamounts
+
+                if (calcOut.CanChange)
                 {
-                    Console.WriteLine("Wie viele " + const_arr_coins[i] + " euro Stuecke sind vorhanden?");
-                    available_coins[i] = Convert.ToInt32(Console.ReadLine());
-                }
-                Console.WriteLine();
-
-                //calling  Calc_coins to calculate the used coins storing the result in
-                arr_change = Calc_Coins(doub_price, doub_given, available_coins);
-
-                //if arr_change is null the calculation failed to find a suitable change otherwise outputs the amount of coins given back
-                if (arr_change == null)
-                {
-                    Console.WriteLine("Kein Wechsel moeglich");
+                    Console.WriteLine("Wechselgeld: ");
+                    if (calcOut.EuroOne != 0)
+                    {
+                        Console.WriteLine(calcOut.EuroOne + "x " + " 1.00 " + " Euro");
+                    }
+                    if (calcOut.FiftyCent != 0)
+                    {
+                        Console.WriteLine(calcOut.FiftyCent + "x " + "50 " + " cent");
+                    }
+                    if (calcOut.TwentyCent != 0)
+                    {
+                        Console.WriteLine(calcOut.TwentyCent + "x " + " 20 " + " cent");
+                    }
+                    if (calcOut.TenCent != 0)
+                    {
+                        Console.WriteLine(calcOut.TenCent + "x " + " 10 " + " cent");
+                    }
+                    if (calcOut.FiveCent != 0)
+                    {
+                        Console.WriteLine(calcOut.FiveCent + "x " + " 5 " + " cent");
+                    }
+                    if (calcOut.TwoCent != 0)
+                    {
+                        Console.WriteLine(calcOut.TwoCent + "x " + " 2 " + " cent");
+                    }
+                    if (calcOut.SingleCent != 0)
+                    {
+                        Console.WriteLine(calcOut.SingleCent + "x " + " 1 " + " cent");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Wechselgeld:");
-                    for(int i = 0; i < const_arr_coins.Length; i++)
-                    {
-                        //if arr_change[i] is zero ther are no coins of that type to return
-                        if (arr_change[i] != 0)
-                        {
-                            Console.WriteLine(arr_change[i] + "x " + const_arr_coins[i].ToString("0.00") + " Euro");
-                        }
-                    }
+                    Console.WriteLine("Kein Wechsel Moeglich");
                 }
-                */
+
+                #endregion
+
+
+                //asking user if he wants to run again and closing if not
                 Console.WriteLine("Weiter?(j)");
 
                 if (Console.ReadKey().KeyChar != 'j')
                 {
                     repeat = false;
                 }
-                /*
-                
+
+
+
             }
+
+
         }
-
-        /// <summary>
-        /// helper function to calculate which coins are given back
-        /// </summary>
-        /// <param name="price">total price paid</param>
-        /// <param name="given">amount of money given</param>
-        /// <param name="avail_coins">coins available in the register</param>
-        /// <returns>array of coin amounts indicated by constant global coin type array, returns null if no full change is possible</returns>
-        public static int[] Calc_Coins(double price, double given, int[] avail_coins)
-        {
-            //array to return  number of coins
-            int[] arr_return = new int[const_arr_coins.Length];
-
-            //checking agains zero values
-            if (price <= 0 || given <= 0)
-            {
-                Console.WriteLine("Geben sie alle werte ein");
-                return null;
-            }
-            else if (price > given)
-            {
-                Console.WriteLine("Es wurde nicht genug bezahlt");
-                return null;
-            }
-            else
-            {
-                //double to hold the remaining change
-                double remaining_change = given - price;
-
-                //calculation loop for coin numer and updating remaining change
-                for (int i = 0; i < const_arr_coins.Length; i++)
-                {
-                    //rounding remaining change since float division can return unexpected results
-                    remaining_change = Math.Round(remaining_change, 2);
-
-                    arr_return[i] = Convert.ToInt32(Math.Floor(remaining_change / const_arr_coins[i]));
-
-                    //checking if coins are available
-                    if (arr_return[i] > avail_coins[i])
-                    {
-                        arr_return[i] = avail_coins[i];
-                    }
-
-                    remaining_change -= Convert.ToDouble(arr_return[i] * const_arr_coins[i]);
-
-                }
-
-                //debug code remove later
-                foreach (int i in arr_return)
-                {
-                    Console.WriteLine(Convert.ToString(i));
-                }
-
-                //checking if change remains and returnign null if any is left, otherwise an array containing the amounts of coins
-                if (remaining_change == 0)
-                {
-                    return arr_return;
-                }
-                else
-                {
-                    return null;
-                }
-
-
-
-    */
-            }
-            
-        }
-
-
     }
 }

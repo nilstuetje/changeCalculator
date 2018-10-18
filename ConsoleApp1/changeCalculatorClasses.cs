@@ -12,46 +12,51 @@ namespace ConsoleApp1
     /// </summary>
     public class ChangeCalculatorInput
     {
-        public int EuroOne { get;  }
-        public int FiftyCent { get;  }
-        public int TwntyCent { get;  }
-        public int TenCent { get;  }
-        public int FiveCent { get;  }
-        public int TwoCent { get;  }
-        public int SingleCent { get;  }
+        public int EuroOne { get; set; }
+        public int FiftyCent { get; set; }
+        public int TwentyCent { get; set; }
+        public int TenCent { get; set; }
+        public int FiveCent { get; set; }
+        public int TwoCent { get; set; }
+        public int SingleCent { get; set; }
 
         public decimal Price { get; set; }
         public decimal Given { get; set; }
 
+
+        /// <summary>
+        /// constructor to create and empty ChangeCalculatorInput object for later assignment of values
+        /// </summary>
         public ChangeCalculatorInput()
         {
-            //reading in values
-            Console.WriteLine("Geben sie den Preis ein: ");
-            Price = Convert.ToDecimal(Console.ReadLine().Replace(".", ","));
-            Console.WriteLine("Geben sie ein wiviel Geld gegeben wurde: ");
-            Given = Convert.ToDecimal(Console.ReadLine().Replace(".", ","));
 
-            Console.WriteLine("Wieviel 1 euro stuecke sind vorhanden?");
-            EuroOne = Convert.ToInt32(Console.ReadLine());
+        }
 
-            Console.WriteLine("Wieviel 50 cent stuecke sind vorhanden?");
-            FiftyCent = Convert.ToInt32(Console.ReadLine());
+        /// <summary>
+        /// constructor to generate a object off ChangeCalculatorInput in one line
+        /// </summary>
+        /// <param name="euroOne">the amount of 1 euro pieces</param>
+        /// <param name="fiftyCent">the amount of 50 cent pieces</param>
+        /// <param name="twentyCent">the amount of twenty cent pieces</param>
+        /// <param name="tencent">the amount of ten cent pieces</param>
+        /// <param name="fiveCent">the amount of five cent pieces</param>
+        /// <param name="twoCent">the amount of 2 cent pieces</param>
+        /// <param name="singleCent">the amount of one cent pieces</param>
+        /// <param name="price">the total price to be paid</param>
+        /// <param name="given">the amount of money given by the customer</param>
+        public ChangeCalculatorInput(int euroOne, int fiftyCent, int twentyCent,int tencent, int fiveCent, int twoCent, int singleCent, 
+            decimal price, decimal given)
+        {
+            EuroOne = euroOne;
+            FiftyCent = fiftyCent;
+            TwentyCent = twentyCent;
+            TenCent = TenCent;
+            FiveCent = fiveCent;
+            TwoCent = twoCent;
+            SingleCent = singleCent;
 
-            Console.WriteLine("Wieviel 20 cent stuecke sind vorhanden?");
-            TwntyCent = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Wieviel 10 cent stuecke sind vorhanden?");
-            TenCent = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Wieviel 5 cent stuecke sind vorhanden?");
-            FiveCent = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Wieviel 2 cent stuecke sind vorhanden?");
-            TwoCent = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Wieviel 1 cent stuecke sind vorhanden?");
-            SingleCent = Convert.ToInt32(Console.ReadLine());
-
+            Price = price;
+            Given = given;
         }
     }
 
@@ -62,91 +67,58 @@ namespace ConsoleApp1
     /// class handling all the calculations
     /// </summary>
     public class ChangeCalculatorCalc
-    {
-        //fields to hold the amount of coins
-        private int EuroOneAvail  = 0;
-        private int FiftyCentAvail  = 0;
-        private int TwentyCentAvail  = 0;
-        private int TenCentAvail  = 0;
-        private int FiveCentAvail  = 0;
-        private int TwoCentAvail  = 0;
-        private int SingleCentAvail  = 0;
-
-        //field that hold the leftover change
-        private decimal remainingChange = 0;
-
-        //fields to hold the calculated change
-        public int EuroOne { get; set; } = 0;
-        public int FiftyCent { get; set; } = 0;
-        public int TwentyCent { get; set; } = 0;
-        public int TenCent { get; set; } = 0;
-        public int FiveCent { get; set; } = 0;
-        public int TwoCent { get; set; } = 0;
-        public int SingleCent { get; set; } = 0;
-
-        
-        //bool to pass back if the calculation failed
-        public bool CanChange { get; set; } = true;
-
-        public ChangeCalculatorCalc(ChangeCalculatorInput input)
-        {
-            EuroOneAvail = input.EuroOne;
-            FiftyCentAvail = input.FiftyCent;
-            TwentyCentAvail = input.TwntyCent;
-            TenCentAvail = input.TenCent;
-            FiveCentAvail = input.FiveCent;
-            TwoCentAvail = input.TwoCent;
-            SingleCentAvail = input.SingleCent;
-
-            Calculate(input.Price, input.Given);
-        }
+    {    
+        private static decimal RemainingChange { get; set; }
 
         /// <summary>
-        /// helper methode that does all the calculation storing the results in public fields
+        /// methode that does all the calculation storing the results in a ChangeCalculatorOuput object
         /// </summary>
-        /// <param name="price">the price to be paid</param>
-        /// <param name="given">the amount of money given by the customer</param>
-        private void Calculate(decimal price, decimal given)
+        /// <param name="calcInput">the ChangeCalculatorInput Class storing all the the Inputs</param>
+        /// <returns>returns a ChangeCalculatorOutput instance holding all the Outputs</returns>
+        public static ChangeCalculatorOutput Calculate(ChangeCalculatorInput calcInput)
         {
-            //intitial Calculation of remainingChange
-            remainingChange = given - price;
-            CanChange = true;
+            //intitial Calculation of remainingChange, creating a ChangeCalculatorOuput object to return
+            RemainingChange = calcInput.Given - calcInput.Price;
+            ChangeCalculatorOutput calcOut = new ChangeCalculatorOutput();
+
+            calcOut.CanChange = true;
 
             //calling UpdateCoinCount 7 times with the appropiate parameters for each coin
-            EuroOne=UpdateCoinCount(EuroOneAvail, 1m);
-            FiftyCent=UpdateCoinCount(FiftyCentAvail, 0.5m);
-            TwentyCent=UpdateCoinCount(TwentyCentAvail, 0.2m);
-            TenCent=UpdateCoinCount(TenCentAvail, 0.1m);
-            FiveCent=UpdateCoinCount(FiveCentAvail, 0.05m);
-            TwoCent=UpdateCoinCount(TwoCentAvail, 0.02m);
-            SingleCent=UpdateCoinCount(SingleCentAvail, 0.01m);
+            calcOut.EuroOne=UpdateCoinCount(calcInput.EuroOne, 1m);
+            calcOut.FiftyCent =UpdateCoinCount(calcInput.FiftyCent, 0.5m);
+            calcOut.TwentyCent =UpdateCoinCount(calcInput.TwentyCent, 0.2m);
+            calcOut.TenCent =UpdateCoinCount(calcInput.TenCent, 0.1m);
+            calcOut.FiveCent =UpdateCoinCount(calcInput.FiveCent, 0.05m);
+            calcOut.TwoCent =UpdateCoinCount(calcInput.TwoCent, 0.02m);
+            calcOut.SingleCent =UpdateCoinCount(calcInput.SingleCent, 0.01m);
 
-            if(remainingChange > 0)
+            if(RemainingChange > 0)
             {
-                CanChange = false;
+                calcOut.CanChange = false;
             }
 
+            return calcOut;
 
         }
 
         /// <summary>
-        /// methode that updates the public fields holding the amount of each coin (this code would repeat 7 times)
+        ///helper methode that returns the amount of coins for each coin type and updates remainingChange (this code would repeat 7 times)
         /// </summary>
         /// <param name="availCoin">how much coins of that type are available</param>
         /// <param name="fieldToUpdate">the field thats beeing updated</param>
         /// <param name="coinValue">the Value of the coin</param>
-        private int UpdateCoinCount(int availCoin, decimal coinValue)
+        private static int UpdateCoinCount(int availCoin, decimal coinValue)
         {
             //checking if the coind count would exceed the amount of available coins and returning the max amount if it is the case
-            if (remainingChange / coinValue > availCoin)
+            if (RemainingChange / coinValue > availCoin)
             {
                 return availCoin;
             }
             else
             {
                 //calculating the amoutn of coins saving it in a variable to update remainingChange using modulo before leaving the methode
-                int returnValue = (int)(remainingChange / coinValue);
-                remainingChange %= coinValue;
+                int returnValue = (int)(RemainingChange / coinValue);
+                RemainingChange %= coinValue;
                 return returnValue;
             }
         }
@@ -154,57 +126,26 @@ namespace ConsoleApp1
     }
 
 
+
+
     /// <summary>
     /// class handling all the output
     /// </summary>
-    public static class ChangeCalculatorOutput
+    public class ChangeCalculatorOutput
     {
-        /// <summary>
-        /// methode printing change to console
-        /// </summary>
-        /// <param name="calc">ChangeCalculatot calc object that holds the calculated change</param>
-        public static void OutputConsole(ChangeCalculatorCalc calc)
-        {
+        //fields holding th e count of coins to give the customer
+        public int EuroOne { get; set; }
+        public int FiftyCent { get; set; }
+        public int TwentyCent { get; set; }
+        public int TenCent { get; set; }
+        public int FiveCent { get; set; }
+        public int TwoCent { get; set; }
+        public int SingleCent { get; set; }
 
-            if (calc.CanChange)
-            {
-
-                Console.WriteLine("Wechselgeld: ");
-                if (calc.EuroOne != 0)
-                {
-                    Console.WriteLine(calc.EuroOne + "x " + " 1.00 " + " Euro");
-                }
-                if (calc.FiftyCent != 0)
-                {
-                    Console.WriteLine(calc.FiftyCent + "x " + "50 " + " cent");
-                }
-                if (calc.TwentyCent != 0)
-                {
-                    Console.WriteLine(calc.TwentyCent + "x " + " 20 " + " cent");
-                }
-                if (calc.TenCent != 0)
-                {
-                    Console.WriteLine(calc.TenCent + "x " + " 10 " + " cent");
-                }
-                if (calc.FiveCent != 0)
-                {
-                    Console.WriteLine(calc.FiveCent + "x " + " 5 " + " cent");
-                }
-                if (calc.TwoCent != 0)
-                {
-                    Console.WriteLine(calc.TwoCent + "x " + " 2 " + " cent");
-                }
-                if (calc.SingleCent != 0)
-                {
-                    Console.WriteLine(calc.SingleCent + "x " + " 1 " + " cent");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Kein Wechsel Moeglich");
-            }
-
-            
+        //field that saves if a change is possible
+        public bool CanChange { get; set; }      
+               
+        
         }
     }
 
